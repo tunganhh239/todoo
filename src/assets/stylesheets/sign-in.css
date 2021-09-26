@@ -1,0 +1,55 @@
+a{
+    color: #606266;
+}
+a:visited{
+    color: black;
+}
+label{
+    line-height: 20px !important;
+    font-weight: bold;
+}
+input{
+    border: 3px solid #C3CFD9 !important;
+}
+
+  .header__title{
+    margin: 0 0 20px 0;
+    font-weight: bold;
+  }
+  
+  .sign-in {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 100vh;
+  }
+  
+  .login{
+    background-color: #FFFFFF;
+    padding: 20px;
+  }
+  .login__form {
+    width: 290px;
+    height: 320px;
+  }
+    .login__form__line{
+        max-width: 70%;
+        height: 2px;
+        background: #DFE6ED;
+        border-radius: 10px;
+        margin: auto;
+    }
+    .login__form__SignIn{
+      width: 100%;
+      margin-top: 22px;
+      background:#1AAE9F;
+      color: white;
+      font-weight: bold;
+    }
+    .login__form__SignUp{
+      border: none;
+      width: 100%;
+      margin-left:0px !important;
+    }
+  

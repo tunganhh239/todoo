@@ -1,0 +1,46 @@
+a{
+    color: #606266;
+}
+  .header__title{
+    margin: 0 0 20px 0;
+    font-weight: bold;
+  }
+  
+  .sign-up {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 100vh;
+  }
+  
+  .register{
+    background-color: #FFFFFF;
+    padding: 20px;
+  }
+  
+  .register__form{
+    width: 290px;
+    height: 340px;
+  }
+    .register__form__line{
+      max-width: 70%;
+      height: 2px;
+      background: #DFE6ED;
+      border-radius: 10px;
+      margin: auto;
+    }
+    .register__form__btnSignUp{
+        width: 100%;
+        margin-top: 22px;
+        background:#1AAE9F;
+        color: white;
+        font-weight: bold;
+    }
+
+    .register__form__btnSignIn{
+      border: none;
+      width: 100%;
+      margin-left:0px !important;
+    }
+    
