@@ -3,11 +3,15 @@ import user from '@/services/user.js';
 
 const state = {
   authenticated: false,
+  email: '',
 };
 
 const getters = {
   authenticated(state) {
     return state.authenticated;
+  },
+  emailUser(state) {
+    return state.email;
   },
 };
 
@@ -19,7 +23,7 @@ const actions = {
   //   formData.append('password',form.password);
 
   // },
-  async signIn({ dispatch }, form) {
+  async signIn({ dispatch, commit }, form) {
     await axios.post('/auth/signin', {
       email: form.email,
       password: form.password,
@@ -29,12 +33,13 @@ const actions = {
       },
     })
       .then((res) => {
-        user.updateUserData(res.data);
-        console.log(res.data);
+        user.updateUserAuthToken(res.data.auth_token);
+        user.updateUserData(res.data.email);
       });
+    await commit('UPDATE_AUTHENTICATE_EMAIL', user.userData());
     await dispatch('updateAuthenticateStatus', true);
   },
-  async signUp({ dispatch }, form) {
+  async signUp({ dispatch, commit }, form) {
     await axios.post('/auth/signup', {
       email: form.email,
       password: form.password,
@@ -45,10 +50,12 @@ const actions = {
       },
     })
       .then((res) => {
-        user.updateUserData(res.data);
-        console.log(res.data);
+        user.updateUser(res.data.email);
+        user.updateUserAuthToken(res.data.auth_token);
       });
+    await commit('UPDATE_AUTHENTICATE_EMAIL', user.userData());
     await dispatch('updateAuthenticateStatus', true);
+    // await commit('UPDATE_AUTHENTICATE_EMAIL',res.data)
   },
   updateAuthenticateStatus({ commit }, status) {
     console.log(status);
@@ -60,7 +67,9 @@ const mutations = {
   UPDATE_AUTHENTICATE_STATUS(state, status) {
     state.authenticated = status;
   },
-
+  UPDATE_AUTHENTICATE_EMAIL(state, email) {
+    state.email = email;
+  },
 };
 
 export default {

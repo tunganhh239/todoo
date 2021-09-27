@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+import store from '@/store/index.js';
 import Home from '../views/Home.vue';
 import SignIn from '@/views/SignIn.vue';
 import SignUp from '@/views/SignUp.vue';
@@ -70,6 +71,11 @@ router.beforeEach((to, _from, next) => {
     }
   } else {
     next();
+  }
+  next();
+  if (to.meta.auth) {
+    const userProfile = user.userData(); // vẫn phải dùng tạm localstorage
+    store.commit('UPDATE_AUTHENTICATE_EMAIL', userProfile);
   }
 });
 

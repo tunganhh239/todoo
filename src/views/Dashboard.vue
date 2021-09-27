@@ -1,8 +1,14 @@
 <template>
     <div class="dashboard">
-        <Header></Header>
-        <div>Dashboard</div>
-        <header style="text-align:left">lmao</header>
+      <el-container>
+         <el-header>
+          <Header/>
+        </el-header>
+        <el-main>
+          Main
+          <div>Dashboard</div>
+        </el-main>
+      </el-container>
     </div>
 </template>
 
@@ -17,5 +23,5 @@ export default {
 </script>
 
 <style scoped>
-
+  @import '../assets/stylesheets/dashboard.css';
 </style>
