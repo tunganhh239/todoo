@@ -65,7 +65,7 @@ router.beforeEach((to, _from, next) => {
     } else if (!isSignedIn) {
       next();
     } else if (isSignedIn) {
-      next({ path: '/dashboard' });
+      // next({ path: '/dashboard' });
     } else {
       next();
     }
@@ -76,6 +76,10 @@ router.beforeEach((to, _from, next) => {
   if (to.meta.auth) {
     const userProfile = user.userData(); // vẫn phải dùng tạm localstorage
     store.commit('UPDATE_AUTHENTICATE_EMAIL', userProfile);
+
+    const token = user.userAuthToken();
+    console.log(token);
+    store.commit('UPDATE_TOKEN', token);
   }
 });
 

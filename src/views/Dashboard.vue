@@ -5,8 +5,7 @@
           <Header/>
         </el-header>
         <el-main>
-          Main
-          <div>Dashboard</div>
+          <MainContent/>
         </el-main>
       </el-container>
     </div>
@@ -14,10 +13,12 @@
 
 <script>
 import Header from '@/components/Header.vue';
+import MainContent from '@/components/MainContent.vue';
 
 export default {
   components: {
     Header,
+    MainContent,
   },
 };
 </script>

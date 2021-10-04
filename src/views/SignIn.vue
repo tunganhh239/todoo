@@ -9,7 +9,7 @@
         @submit.native.prevent="submit"
         >
           <el-form-item label="Email">
-            <el-input v-model="form.email"></el-input>
+            <el-input class="login__input" v-model="form.email"></el-input>
           </el-form-item>
           <el-form-item label="Password" >
             <el-input v-model="form.password" show-password></el-input>
@@ -58,8 +58,10 @@ export default {
         password: this.form.password,
       };
       try {
-        await this.signIn(user);
-        this.$router.push('/dashboard');
+        await this.signIn(user).then(() => {
+          console.log('la');
+          this.$router.push('/dashboard');
+        });
         // await this.signIn({
         //   email: user.email,
         //   password: user.password,
