@@ -4,7 +4,7 @@
             <div class="dialog-title"><h2>edit</h2></div>
             <div class="dialog-content">
                 <!-- ref="ruleForm" :rules="rules" :model="ruleForm" -->
-                <el-form class="edit-form">
+                <el-form ref="ruleForm" :rules="rules" :model="ruleForm" class="edit-form">
                   <div class="edit-form-content">
                     <el-form-item label="Title" prop="inputTitle">
                       <el-input
@@ -120,6 +120,15 @@ export default {
         // inputTitle: this.todoData.title,
         inputTitle: '',
       },
+      rules: {
+        inputTitle: [
+          {
+            required: true,
+            message: 'Title cannot be blank',
+            trigger: 'blur',
+          },
+        ],
+      },
       itemContent: '',
       itemContentAdd: '',
     };
@@ -190,7 +199,21 @@ export default {
       this.itemContentAdd = '';
       this.addItemStatus = !this.addItemStatus;
     },
-    saveSubmit() {
+    async saveSubmit() {
+      const valid = await this.$refs.ruleForm.validate();
+      if (!valid) {
+        return;
+      }
+      await axios.put(`api/v1/todos/${this.todoId}`, {
+        title: this.ruleForm.inputTitle,
+      }, {
+        headers: {
+          Authorization: `${user.userAuthToken()}`,
+          'Content-Type': 'application/json',
+        },
+      }).then((res) => {
+        console.log(res.data);
+      });
       this.todoData.items.forEach((item) => {
         if (item.added) {
           item.edited = false;

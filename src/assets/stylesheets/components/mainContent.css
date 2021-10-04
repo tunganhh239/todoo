@@ -55,6 +55,9 @@
     .main__todo:last-child {
         border: 3px solid #C3CFD9;
     }
+        .todo__title{
+            cursor: pointer;
+        } 
         .todo__menu, .todo__menu__add{
             font-size: 30px;
         }

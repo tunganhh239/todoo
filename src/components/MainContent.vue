@@ -40,7 +40,7 @@
                 </el-form>
             </div>
             <div class="main__todo" v-for="todo in todos" :key="todo.id">
-                <div class="todo__title"><h1>{{todo.title}}</h1></div>
+                <div class="todo__title" @click="checkTodo(todo.id)"><h1>{{todo.title}}</h1></div>
                 <div class="todo__menu">
                     <i class="el-icon-edit el-icon--margin" @click="editTodo(todo.id)"></i>
                     <i class="el-icon-delete" @click="submitDeleteTodo(todo.id)"></i>
@@ -57,18 +57,24 @@
         <div v-if="editStatus" >
           <EditDialog @close="closeEditTodo" :todoId="todoId" @editStatus="updateEditStatus"/>
         </div>
+        <div v-if="checkStatus">
+          <CheckDialog @close="checkStatus = !checkStatus" :todoId="todoId"
+                       @checkStatus="updateCheckStatus"/>
+        </div>
     </div>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import EditDialog from './EditDialog.vue';
+import CheckDialog from './CheckDialog.vue';
 
 // import { mapGetters } from 'vuex';
 
 export default {
   components: {
     EditDialog,
+    CheckDialog,
   },
   data() {
     return {
@@ -78,6 +84,7 @@ export default {
       },
       addStatus: false,
       editStatus: false,
+      checkStatus: false,
       rules: {
         inputTitle: [
           {
@@ -119,6 +126,11 @@ export default {
       this.todoId = todoId;
       console.log(todoId);
     },
+    checkTodo(todoId) {
+      this.checkStatus = !this.checkStatus;
+      this.todoId = todoId;
+      console.log(todoId);
+    },
     closeEditTodo() {
       this.editStatus = !this.editStatus;
       this.todos.forEach((element) => {
@@ -127,8 +139,13 @@ export default {
         });
       });
     },
-    updateEditStatus(status) {
+    async updateEditStatus(status) {
+      await this.$store.dispatch('loadTodo');
       this.editStatus = status;
+    },
+    updateCheckStatus(status) {
+      this.checkStatus = status;
+      console.log(this.checkStatus);
     },
   },
 };
