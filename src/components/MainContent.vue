@@ -1,9 +1,11 @@
 <template>
-    <div class="main__container">
+    <div class="main__container" v-loading="loading">
         <div class="container__header">
             <div class="main__title"><h1>MY TO-DO LIST</h1></div>
             <div class="main__menu">
-                <el-input class="menu__search" placeholder="Enter to search" v-model="input">
+                <el-input class="menu__search"
+                          placeholder="Enter to search"
+                          @change="search" v-model="inputSearch">
                 </el-input>
                 <el-button class="menu__btn__add" @click=" addStatus = !addStatus">
                     Add new</el-button>
@@ -43,7 +45,7 @@
                 <div class="todo__title" @click="checkTodo(todo.id)"><h1>{{todo.title}}</h1></div>
                 <div class="todo__menu">
                     <i class="el-icon-edit el-icon--margin" @click="editTodo(todo.id)"></i>
-                    <i class="el-icon-delete" @click="submitDeleteTodo(todo.id)"></i>
+                    <i class="el-icon-delete" @click="deleteTodoConfirm(todo.id)"></i>
                 </div>
             </div>
         </div>
@@ -51,7 +53,9 @@
             <el-pagination
                 background
                 layout="prev, pager, next"
-                :total="100">
+                @current-change="setPage"
+                :page-size="5"
+                :total="totalPage*5">
             </el-pagination>
         </div>
         <div v-if="editStatus" >
@@ -61,6 +65,9 @@
           <CheckDialog @close="checkStatus = !checkStatus" :todoId="todoId"
                        @checkStatus="updateCheckStatus"/>
         </div>
+        <div v-if="deleleStatus">
+          <DeleteDialog @close="deleleStatus = !deleleStatus" :todoId="todoId" />
+        </div>
     </div>
 </template>
 
@@ -68,23 +75,26 @@
 import { mapActions, mapGetters } from 'vuex';
 import EditDialog from './EditDialog.vue';
 import CheckDialog from './CheckDialog.vue';
-
+import DeleteDialog from './ConfirmDeleteDialog.vue';
 // import { mapGetters } from 'vuex';
 
 export default {
   components: {
     EditDialog,
     CheckDialog,
+    DeleteDialog,
   },
   data() {
     return {
-      input: '',
+      inputSearch: '',
       ruleForm: {
         inputTitle: '',
       },
       addStatus: false,
       editStatus: false,
+      deleleStatus: false,
       checkStatus: false,
+      searchStatus: false,
       rules: {
         inputTitle: [
           {
@@ -95,16 +105,28 @@ export default {
         ],
       },
       todoId: '',
+      page: 1,
+      pageSize: 5,
     };
   },
   created() {
-    this.$store.dispatch('loadTodo');
+    this.$store.dispatch('loadTodo', this.page);
   },
   computed: {
-    ...mapGetters(['todos']),
+    ...mapGetters(['todos', 'totalPage', 'loading']),
   },
   methods: {
-    ...mapActions(['addTodo', 'deleteTodo']),
+    ...mapActions(['addTodo']),
+    setPage(page) {
+      if (this.searchStatus) {
+        this.page = page;
+        const data = { inputSearch: this.inputSearch, page: this.page };
+        this.$store.dispatch('searchTodo', data);
+      } else {
+        this.page = page;
+        this.$store.dispatch('loadTodo', this.page);
+      }
+    },
     async submitAddTodo() {
       const valid = await this.$refs.ruleForm.validate();
       if (!valid) {
@@ -118,8 +140,9 @@ export default {
       this.ruleForm.inputTitle = '';
       this.addStatus = false;
     },
-    async submitDeleteTodo(id) {
-      await this.deleteTodo(id);
+    deleteTodoConfirm(todoId) {
+      this.deleleStatus = true;
+      this.todoId = todoId;
     },
     editTodo(todoId) {
       this.editStatus = !this.editStatus;
@@ -140,12 +163,23 @@ export default {
       });
     },
     async updateEditStatus(status) {
-      await this.$store.dispatch('loadTodo');
+      await this.$store.dispatch('loadTodo', 1);
       this.editStatus = status;
     },
     updateCheckStatus(status) {
       this.checkStatus = status;
       console.log(this.checkStatus);
+    },
+    search() {
+      console.log(this.inputSearch);
+      if (this.inputSearch !== '') {
+        this.searchStatus = true;
+        const data = { inputSearch: this.inputSearch, page: this.page };
+        this.$store.dispatch('searchTodo', data);
+      } else {
+        this.searchStatus = false;
+        this.$store.dispatch('loadTodo', this.page);
+      }
     },
   },
 };

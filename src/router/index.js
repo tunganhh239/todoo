@@ -78,7 +78,7 @@ router.beforeEach((to, _from, next) => {
     store.commit('UPDATE_AUTHENTICATE_EMAIL', userProfile);
 
     const token = user.userAuthToken();
-    console.log(token);
+    // console.log(token);
     store.commit('UPDATE_TOKEN', token);
   }
 });

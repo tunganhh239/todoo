@@ -51,7 +51,7 @@ const actions = {
       },
     })
       .then((res) => {
-        user.updateUser(res.data.email);
+        user.updateUserData(res.data.email);
         user.updateUserAuthToken(res.data.auth_token);
       });
     await commit('UPDATE_AUTHENTICATE_EMAIL', user.userData());

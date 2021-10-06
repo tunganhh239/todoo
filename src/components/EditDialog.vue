@@ -1,6 +1,6 @@
 <template>
     <div class="editDialog" @click="$emit('close')">
-        <div class="dialog-container" @click.stop>
+        <div class="dialog-container" @click.stop v-loading="loading">
             <div class="dialog-title"><h2>edit</h2></div>
             <div class="dialog-content">
                 <!-- ref="ruleForm" :rules="rules" :model="ruleForm" -->
@@ -106,7 +106,6 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
 import axios from 'axios';
 import user from '@/services/user.js';
 
@@ -131,6 +130,7 @@ export default {
       },
       itemContent: '',
       itemContentAdd: '',
+      loading: '',
     };
   },
   computed: {
@@ -142,6 +142,7 @@ export default {
     todoId: Number,
   },
   created() {
+    this.loading = true;
     axios.get(`/api/v1/todos/${this.todoId}`, {
       headers: {
         Authorization: `${user.userAuthToken()}`,
@@ -153,11 +154,14 @@ export default {
       });
       this.todoData = res.data;
       this.ruleForm.inputTitle = res.data.title;
+      this.loading = false;
       console.log(this.todoData);
+    }).catch(() => {
+      user.signOut();
+      this.$router.push({ name: 'SignIn' });
     });
   },
   methods: {
-    ...mapActions(['updateItem']),
     editItem(id) {
       this.todoData.items.forEach((item) => {
         if (item.id === id) {
@@ -173,8 +177,6 @@ export default {
         if (item.id === id) this.deleteItemData.push(id);
         return item.id !== id;
       });
-      console.log(this.deleteItemData);
-      console.log(this.todoData.items);
     },
     saveEditItem(itemId, todoId) {
       const data = { itemContent: this.itemContent, itemId, todoId };
@@ -204,6 +206,7 @@ export default {
       if (!valid) {
         return;
       }
+      this.loading = true;
       await axios.put(`api/v1/todos/${this.todoId}`, {
         title: this.ruleForm.inputTitle,
       }, {
@@ -213,6 +216,9 @@ export default {
         },
       }).then((res) => {
         console.log(res.data);
+        this.loading = false;
+      }).catch(() => {
+        user.signOut();
       });
       this.todoData.items.forEach((item) => {
         if (item.added) {
@@ -226,6 +232,7 @@ export default {
             },
           }).then(() => {
             console.log('Them thanh cong');
+            this.loading = false;
           });
         } else if (item.edited) {
           axios.put(`/api/v1/todos/${this.todoId}/items/${item.id}`, {
@@ -237,6 +244,9 @@ export default {
             },
           }).then((res) => {
             console.log(`Sua thanh cong ${res}`);
+            this.loading = false;
+          }).catch(() => {
+            user.signOut();
           });
         }
       });
@@ -246,6 +256,11 @@ export default {
             Authorization: `${user.userAuthToken()}`,
             'Content-Type': 'application/json',
           },
+        }).then(() => {
+          this.loading = false;
+        }).catch(() => {
+          user.signOut();
+          this.$router.push({ name: 'SignIn' });
         });
       });
       this.$emit('editStatus', false);

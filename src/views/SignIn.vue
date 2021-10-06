@@ -1,5 +1,5 @@
 <template>
-    <div class="sign-in">
+    <div class="sign-in" v-loading="loading">
       <div class="header">
         <h2 class="header__title">SIGN IN</h2>
       </div>
@@ -7,11 +7,14 @@
         <el-form
         class="login__form"
         @submit.native.prevent="submit"
+        :model="form"
+        :rules="rules"
+        ref="form"
         >
-          <el-form-item label="Email">
+          <el-form-item label="Email" prop="email">
             <el-input class="login__input" v-model="form.email"></el-input>
           </el-form-item>
-          <el-form-item label="Password" >
+          <el-form-item label="Password" prop="password">
             <el-input v-model="form.password" show-password></el-input>
           </el-form-item>
           <div class="login__form__line"></div>
@@ -45,6 +48,16 @@ export default {
         email: '',
         password: '',
       },
+      rules: {
+        email: [
+          { required: true, message: 'Please input email', trigger: 'blur' },
+          { type: 'email', message: 'Please input correct email address', trigger: ['blur', 'change'] },
+        ],
+        password: [
+          { required: true, message: 'Please input password', trigger: 'blur' },
+        ],
+      },
+      loading: false,
     };
   },
   components: {
@@ -53,22 +66,24 @@ export default {
   methods: {
     ...mapActions(['signIn']),
     async submit() {
+      const valid = await this.$refs.form.validate();
+      if (!valid) {
+        return;
+      }
+      this.loading = true;
       const user = {
         email: this.form.email,
         password: this.form.password,
       };
-      try {
-        await this.signIn(user).then(() => {
-          console.log('la');
-          this.$router.push('/dashboard');
-        });
-        // await this.signIn({
-        //   email: user.email,
-        //   password: user.password,
-        // });
-      } catch (e) {
-        console.log('loi~');
-      }
+
+      await this.signIn(user).then(() => {
+        this.loading = false;
+        console.log('la');
+        this.$router.push('/dashboard');
+      }).catch((e) => {
+        this.loading = false;
+        console.log(e);
+      });
     },
   },
 };

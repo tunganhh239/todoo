@@ -6,6 +6,7 @@
         </el-header>
         <el-main>
           <MainContent/>
+          <Footer/>
         </el-main>
       </el-container>
     </div>
@@ -14,11 +15,13 @@
 <script>
 import Header from '@/components/Header.vue';
 import MainContent from '@/components/MainContent.vue';
+import Footer from '@/components/Footer.vue';
 
 export default {
   components: {
     Header,
     MainContent,
+    Footer,
   },
 };
 </script>

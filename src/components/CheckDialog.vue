@@ -1,6 +1,6 @@
 <template>
   <div class="checkDialog" @click="$emit('close')">
-    <div class="dialog-container" @click.stop>
+    <div class="dialog-container" @click.stop v-loading="loading">
       <div class="dialog-title"><h2>{{todoData.title}}</h2></div>
       <div class="dialog-content">
         <el-form class="check-form">
@@ -36,6 +36,7 @@ export default {
     return {
       done: true,
       todoData: {},
+      loading: '',
     };
   },
   computed: {
@@ -44,12 +45,14 @@ export default {
     },
   },
   created() {
+    this.loading = true;
     axios.get(`/api/v1/todos/${this.todoId}`, {
       headers: {
         Authorization: `${user.userAuthToken()}`,
         'Content-Type': 'application/json',
       },
     }).then((res) => {
+      this.loading = false;
       this.todoData = res.data;
       console.log(this.todoData);
     });
