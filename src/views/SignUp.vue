@@ -89,10 +89,9 @@ export default {
           this.signUpSuccess();
           this.$router.push('/');
         })
-        .catch((e) => {
+        .catch(() => {
           this.signUpFail();
           this.loading = false;
-          console.log(e);
         });
     },
     signUpSuccess() {

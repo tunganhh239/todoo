@@ -155,7 +155,6 @@ export default {
       this.todoData = res.data;
       this.ruleForm.inputTitle = res.data.title;
       this.loading = false;
-      console.log(this.todoData);
     }).catch(() => {
       user.signOut();
       this.$router.push({ name: 'SignIn' });
@@ -174,7 +173,11 @@ export default {
     },
     deleteItem(id) {
       this.todoData.items = this.todoData.items.filter((item) => {
-        if (item.id === id) this.deleteItemData.push(id);
+        if (item.id === id) {
+          if (!item.added) {
+            this.deleteItemData.push(id);
+          }
+        }
         return item.id !== id;
       });
     },
@@ -187,7 +190,6 @@ export default {
           item.edited = true;
         }
       });
-      console.log(this.todoData);
     },
     saveAddItem() {
       const id = Math.floor(Math.random() * (10000 - 1000 + 1) + 1000);
@@ -214,8 +216,7 @@ export default {
           Authorization: `${user.userAuthToken()}`,
           'Content-Type': 'application/json',
         },
-      }).then((res) => {
-        console.log(res.data);
+      }).then(() => {
         this.loading = false;
       }).catch(() => {
         user.signOut();
@@ -231,7 +232,6 @@ export default {
               'Content-Type': 'application/json',
             },
           }).then(() => {
-            console.log('Them thanh cong');
             this.loading = false;
           });
         } else if (item.edited) {
@@ -242,8 +242,7 @@ export default {
               Authorization: `${user.userAuthToken()}`,
               'Content-Type': 'application/json',
             },
-          }).then((res) => {
-            console.log(`Sua thanh cong ${res}`);
+          }).then(() => {
             this.loading = false;
           }).catch(() => {
             user.signOut();

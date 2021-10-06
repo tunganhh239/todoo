@@ -74,8 +74,7 @@ const actions = {
           Authorization: `${state.token}`,
           'Content-Type': 'application/json',
         },
-      }).then((res) => {
-        console.log(res.data);
+      }).then(() => {
         dispatch('loadTodo', 1);
         commit('UPDATE_LOADING', false);
       });
@@ -92,8 +91,7 @@ const actions = {
           'Content-Type': 'application/json',
         },
       })
-      .then((res) => {
-        console.log(res.data);
+      .then(() => {
         dispatch('loadTodo', data.page);
         commit('UPDATE_LOADING', false);
       })
@@ -111,7 +109,6 @@ const actions = {
         'Content-Type': 'application/json',
       },
     }).then(() => {
-      console.log('load khi save');
       dispatch('loadTodo', 1);
       commit('UPDATE_LOADING', false);
     }).catch(() => {

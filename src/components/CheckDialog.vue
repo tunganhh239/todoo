@@ -52,7 +52,6 @@ export default {
     }).then((res) => {
       this.loading = false;
       this.todoData = res.data;
-      console.log(this.todoData);
     });
   },
   methods: {
@@ -73,7 +72,6 @@ export default {
     },
     test(id) {
       this.todoData.items.find((x) => x.id === id).changed = true;
-      // console.log(this.todoData.items)
     },
   },
   props: {

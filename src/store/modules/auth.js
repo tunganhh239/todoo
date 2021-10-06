@@ -34,7 +34,6 @@ const actions = {
     })
       .then((res) => {
         user.updateUserAuthToken(res.data.auth_token);
-        console.log(res.data.auth_token);
         user.updateUserData(res.data.email);
       });
     await commit('UPDATE_AUTHENTICATE_EMAIL', user.userData());
@@ -59,7 +58,6 @@ const actions = {
     // await commit('UPDATE_AUTHENTICATE_EMAIL',res.data)
   },
   updateAuthenticateStatus({ commit }, status) {
-    console.log(status);
     commit('UPDATE_AUTHENTICATE_STATUS', status);
   },
 };

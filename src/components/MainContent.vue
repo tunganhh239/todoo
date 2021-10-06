@@ -137,12 +137,10 @@ export default {
     editTodo(todoId) {
       this.editStatus = !this.editStatus;
       this.todoId = todoId;
-      console.log(todoId);
     },
     checkTodo(todoId) {
       this.checkStatus = !this.checkStatus;
       this.todoId = todoId;
-      console.log(todoId);
     },
     closeEditTodo() {
       this.editStatus = !this.editStatus;
@@ -158,10 +156,8 @@ export default {
     },
     updateCheckStatus(status) {
       this.checkStatus = status;
-      console.log(this.checkStatus);
     },
     search() {
-      console.log(this.inputSearch);
       if (this.inputSearch !== '') {
         this.searchStatus = true;
         const data = { inputSearch: this.inputSearch, page: this.page };
