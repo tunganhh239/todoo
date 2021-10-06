@@ -18,11 +18,13 @@ import { mapActions } from 'vuex';
 export default {
   props: {
     todoId: Number,
+    page: Number,
   },
   methods: {
     ...mapActions(['deleteTodo']),
     async submitDeleteTodo(id) {
-      await this.deleteTodo(id);
+      const data = { id, page: this.page };
+      await this.deleteTodo(data);
       this.$emit('close');
     },
   },

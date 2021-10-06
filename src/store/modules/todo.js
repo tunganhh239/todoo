@@ -83,9 +83,9 @@ const actions = {
       user.signOut();
     }
   },
-  async deleteTodo({ commit, dispatch }, id) {
+  async deleteTodo({ commit, dispatch }, data) {
     commit('UPDATE_LOADING', true);
-    await axios.delete(`/api/v1/todos/${id}`,
+    await axios.delete(`/api/v1/todos/${data.id}`,
       {
         headers: {
           Authorization: `${state.token}`,
@@ -94,7 +94,7 @@ const actions = {
       })
       .then((res) => {
         console.log(res.data);
-        dispatch('loadTodo', 1);
+        dispatch('loadTodo', data.page);
         commit('UPDATE_LOADING', false);
       })
       .catch(() => {

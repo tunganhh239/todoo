@@ -86,11 +86,29 @@ export default {
       await this.signUp(user)
         .then(() => {
           this.loading = false;
-          this.$router.push('/dashboard');
-        }).catch((e) => {
-          console.log('loi~');
+          this.signUpSuccess();
+          this.$router.push('/');
+        })
+        .catch((e) => {
+          this.signUpFail();
+          this.loading = false;
           console.log(e);
         });
+    },
+    signUpSuccess() {
+      this.$notify({
+        title: 'Thành công',
+        message: 'Đăng ký thành công',
+        type: 'success',
+        duration: 2000,
+      });
+    },
+    signUpFail() {
+      this.$notify.error({
+        title: 'Không thành công',
+        message: 'Đăng ký thất bại',
+        duration: 2000,
+      });
     },
   },
 };

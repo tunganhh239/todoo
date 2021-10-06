@@ -78,11 +78,26 @@ export default {
 
       await this.signIn(user).then(() => {
         this.loading = false;
-        console.log('la');
-        this.$router.push('/dashboard');
-      }).catch((e) => {
+        this.signInSuccess();
+        this.$router.push('/');
+      }).catch(() => {
         this.loading = false;
-        console.log(e);
+        this.signInFail();
+      });
+    },
+    signInFail() {
+      this.$notify.error({
+        title: 'Không thành công',
+        message: 'Đăng nhập thất bại',
+        duration: 2000,
+      });
+    },
+    signInSuccess() {
+      this.$notify({
+        title: 'Thành công',
+        message: 'Đăng nhập thành công',
+        type: 'success',
+        duration: 2000,
       });
     },
   },

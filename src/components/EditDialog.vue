@@ -264,8 +264,6 @@ export default {
         });
       });
       this.$emit('editStatus', false);
-      console.log(this.todoData);
-      // this.todoData = {};
     },
   },
 };

@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import store from '@/store/index.js';
-import Home from '../views/Home.vue';
 import SignIn from '@/views/SignIn.vue';
 import SignUp from '@/views/SignUp.vue';
 import Dashboard from '@/views/Dashboard.vue';
@@ -11,11 +10,6 @@ import user from '@/services/user.js';
 Vue.use(VueRouter);
 
 const routes = [
-  {
-    path: '/',
-    name: 'Home',
-    component: Home,
-  },
   {
     path: '/about',
     name: 'About',
@@ -38,7 +32,7 @@ const routes = [
     meta: { auth: false },
   },
   {
-    path: '/dashboard',
+    path: '/',
     name: 'Dashboard',
     component: Dashboard,
     meta: { auth: true },
@@ -78,7 +72,6 @@ router.beforeEach((to, _from, next) => {
     store.commit('UPDATE_AUTHENTICATE_EMAIL', userProfile);
 
     const token = user.userAuthToken();
-    // console.log(token);
     store.commit('UPDATE_TOKEN', token);
   }
 });

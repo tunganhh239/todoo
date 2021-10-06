@@ -4,7 +4,6 @@
       <div class="dialog-title"><h2>{{todoData.title}}</h2></div>
       <div class="dialog-content">
         <el-form class="check-form">
-
           <div class="content-check">
             <el-form-item
               label="Todo">
@@ -16,7 +15,6 @@
                 </div>
               </div>
             </el-form-item>
-
           </div>
           <el-form-item class="check-form-bottom ">
             <el-button class="btnCloseCheck" @click="submit">Close</el-button>
@@ -68,8 +66,6 @@ export default {
               Authorization: `${user.userAuthToken()}`,
               'Content-Type': 'application/json',
             },
-          }).then((res) => {
-            console.log(`Doneee ${res}`);
           });
         }
       });

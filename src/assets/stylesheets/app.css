@@ -37,3 +37,6 @@ button:focus{
 .el-loading-spinner .path{
   stroke: #1AAE9F;
 }
+.el-notification__group{
+  font-family: Roboto, sans-serif;
+}

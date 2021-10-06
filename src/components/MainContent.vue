@@ -10,19 +10,11 @@
                 <el-button class="menu__btn__add" @click=" addStatus = !addStatus">
                     Add new</el-button>
             </div>
-            <!-- <el-row >
-                <el-col class="main__title" :span="12"><h1>MY TO-DO LIST</h1></el-col>
-                <el-col :span="10">
-                    <el-input class="main__search" placeholder="Enter to search" v-model="input">
-                    </el-input>
-                </el-col>
-                <el-col :span="2">
-                    <el-button class="menu__btn__add" @click=" addStatus = !addStatus">
-                    Add new</el-button>
-                </el-col>
-            </el-row> -->
         </div>
         <div class="main__todolist" >
+          <div class="nothing" v-if="todos.length===0 && !addStatus">
+              Không có dữ liệu.
+          </div>
             <div class="main__todo" v-if="addStatus">
                 <el-form class="addTitle__form" ref="ruleForm" :rules="rules" :model="ruleForm">
                     <div class="todo__title__add">
@@ -66,7 +58,7 @@
                        @checkStatus="updateCheckStatus"/>
         </div>
         <div v-if="deleleStatus">
-          <DeleteDialog @close="deleleStatus = !deleleStatus" :todoId="todoId" />
+          <DeleteDialog @close="deleleStatus = !deleleStatus" :todoId="todoId" :page="page" />
         </div>
     </div>
 </template>
@@ -76,7 +68,6 @@ import { mapActions, mapGetters } from 'vuex';
 import EditDialog from './EditDialog.vue';
 import CheckDialog from './CheckDialog.vue';
 import DeleteDialog from './ConfirmDeleteDialog.vue';
-// import { mapGetters } from 'vuex';
 
 export default {
   components: {
@@ -106,7 +97,6 @@ export default {
       },
       todoId: '',
       page: 1,
-      pageSize: 5,
     };
   },
   created() {
@@ -163,7 +153,7 @@ export default {
       });
     },
     async updateEditStatus(status) {
-      await this.$store.dispatch('loadTodo', 1);
+      await this.$store.dispatch('loadTodo', this.page);
       this.editStatus = status;
     },
     updateCheckStatus(status) {
