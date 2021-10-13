@@ -102,9 +102,6 @@ export default {
   created() {
     this.$store.dispatch('loadTodo', this.page);
   },
-  mounted() {
-    console.log(this.$el);
-  },
   computed: {
     ...mapGetters(['todos', 'totalPage', 'loading']),
   },
