@@ -37,7 +37,10 @@ const routes = [
     component: Dashboard,
     meta: { auth: true },
   },
-
+  {
+    path: '*',
+    redirect: '/',
+  },
 ];
 
 const router = new VueRouter({
